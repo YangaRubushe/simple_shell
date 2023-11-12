@@ -24,7 +24,7 @@ void shell_set_info(shell_info_t *info, char **av)
         info->fname = av[0];
         if (info->arg)
         {
-                info->argv = strtow(info->arg, " \t");
+                info->argv = strtok(info->arg, " \t");
                 if (!info->argv)
                 {
 
@@ -51,7 +51,7 @@ void shell_set_info(shell_info_t *info, char **av)
  */
 void shell_free_info(shell_info_t *info, int all)
 {
-        ffree(info->argv);
+        free(info->argv);
         info->argv = NULL;
         info->path = NULL;
         if (all)
@@ -59,15 +59,15 @@ void shell_free_info(shell_info_t *info, int all)
                 if (!info->cmd_buffer)
                         free(info->arg);
                 if (info->env)
-                        free_list(&(info->env));
+                        shell_free_list(&(info->env));
                 if (info->history)
-                        free_list(&(info->history));
+                        shell_free_list(&(info->history));
                 if (info->alias)
-                        free_list(&(info->alias));
-                ffree(info->environ);
+                        shell_free_list(&(info->alias));
+                free(info->environ);
                 info->environ = NULL;
-                bfree((void **)info->cmd_buffer);
-                if (info->readfd > 2)
+                free((void **)info->cmd_buffer);
+                if (info->read_fd > 2)
                         close(info->read_fd);
                 shell_putchar(BUFFER_FLUSH);
         }

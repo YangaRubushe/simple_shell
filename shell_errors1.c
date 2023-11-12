@@ -68,23 +68,23 @@ int shell_error_putchar(char c)
 }
 
 /**
- * *_putfd - writes character c given fd
+ * *shell_put_fd - writes character c given fd
  * @c: The character to print
  * @fd: filedescriptor to write
  *
  * Return: 1 - success, otherwise -1 - error
  */
-int _putfd(char c, int fd)
+int shell_put_fd(char c, int fd)
 {
         static int j;
-        static char buf[WRITE_BUF_SIZE];
+        static char buf[WRITE_BUFFER_SIZE];
 
-        if (c == BUF_FLUSH || j >= WRITE_BUF_SIZE)
+        if (c == BUFFER_FLUSH || j >= WRITE_BUFFER_SIZE)
         {
                 write(fd, buf, j);
                 j = 0;
         }
-        if (c != BUF_FLUSH)
+        if (c != BUFFER_FLUSH)
         {
                 buf[j++] = c;
         }
