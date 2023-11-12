@@ -16,18 +16,18 @@ int shell_is_command_chain(shell_info_t *info, char *buf, size_t *p)
         {
                 buf[j] = 0;
                 j++;
-                info->cmd_buffer_type = CMD_OR;
+                info->cmd_buffer_type = COMMAND_OR;
         }
         else if (buf[j] == '&' && buf[j + 1] == '&')
         {
                 buf[j] = 0;
                 j++;
-                info->cmd_buffer_type = CMD_AND;
+                info->cmd_buffer_type = COMMAND_AND;
         }
         else if (buf[j] == ';')
         {
                 buf[j] = 0;
-                info->cmd_buffer_type = CMD_CHAIN;
+                info->cmd_buffer_type = COMMAND_CHAIN;
         }
         else
                 return (0);
@@ -107,26 +107,26 @@ int shell_replace_aliases(shell_info_t *info)
 int shell_replace_variables(shell_info_t *info)
 {
         int i = 0;
-        list_t *node;
+        shell_list_t *node;
 
         for (i = 0; info->argv[i]; i++)
         {
                 if (info->argv[i][0] != '$' || !info->argv[i][1])
                         continue;
 
-                if (!_strcmp(info->argv[i], "$?"))
+                if (!shell_string_compare(info->argv[i], "$?"))
                 {
                         shell_replace_string(&(info->argv[i]),
                                         shell_string_duplicate(shell_convert_number(info->status, 10, 0)));
                         continue;
                 }
-                if (!_strcmp(info->argv[i], "$$"))
+                if (!shell_string_compare(info->argv[i], "$$"))
                 {
                         shell_replace_string(&(info->argv[i]),
                                         shell_string_duplicate(shell_convert_number(getpid(), 10, 0)));
                         continue;
                 }
-                node = node_starts_with(info->env, &info->argv[i][1], '=');
+                node = shell_starts_with(info->env, &info->argv[i][1], '=');
                 if (node)
                 {
                         shell_replace_string(&(info->argv[i]),

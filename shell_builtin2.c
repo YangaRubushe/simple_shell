@@ -8,8 +8,8 @@
  */
 int shell_history(shell_info_t *info)
 {
-        shell_print_list(info->history);
-        return (0);
+	shell_print_list(info->history);
+	return (0);
 }
 
 /**
@@ -22,20 +22,20 @@ int shell_history(shell_info_t *info)
  */
 int shell_unset_alias(shell_info_t *info, char *str)
 {
-        char *a, b;
-        int ret;
+	char *a, b;
+	int ret;
 
-        a = shell_string_find_char(str, '=');
-        if (!a)
-        {
-                return (1);
-        }
-        b = *a;
-        *a = 0;
-        ret = shell_delete_node_at_index(&(info->alias),
-                        shell_get_node_index(info->alias, shell_starts_with(info->alias, str, -1)));
-        *a = b;
-        return (ret);
+	a = shell_string_find_char(str, '=');
+	if (!a)
+	{
+		return (1);
+	}
+	b = *a;
+	*a = 0;
+	ret = shell_delete_node_at_index(&(info->alias),
+                        shell_get_node_index(info->alias, shell_node_starts_with(info->alias, str, -1)));
+	*a = b;
+	return (ret);
 }
 
 /**
@@ -64,12 +64,12 @@ int shell_set_alias(shell_info_t *info, char *str)
 }
 
 /**
- * print_alias - prints an alias string
+ * shell_print_alias - prints an alias string
  * @node: the alias node
  *
  * Return: Always 0 - Success
  */
-int print_alias(shell_list_t *node)
+int shell_print_alias(shell_list_t *node)
 {
         char *a = NULL, *b = NULL;
 
@@ -115,10 +115,10 @@ int shell_alias(shell_info_t *info)
                 a = shell_string_find_char(info->argv[j], '=');
                 if (a)
                 {
-                        set_alias(info, info->argv[j]);
+                        shell_set_alias(info, info->argv[j]);
                 }
                 else
-                        print_alias(node_starts_with(info->alias, info->argv[j], '='));
+                        shell_print_alias(shell_node_starts_with(info->alias, info->argv[j], '='));
         }
 
         return (0);

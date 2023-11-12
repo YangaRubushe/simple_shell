@@ -35,7 +35,7 @@ int main(int ac, char **av)
                         }
                         return (EXIT_FAILURE);
                 }
-                info->readfd = fd;
+                info->read_fd = fd;
         }
         shell_populate_environment_list(info);
         shell_read_history(info);

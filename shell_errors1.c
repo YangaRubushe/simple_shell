@@ -1,12 +1,12 @@
 #include "shell.h"
 
 /**
- * _eputs - prints an input strings
+ * shell_error_puts - prints an input strings
  * @str: string to be printed
  *
  * Return: NULL
  */
-void _eputs(char *str)
+void shell_error_puts(char *str)
 {
         int j = 0;
 
@@ -17,19 +17,19 @@ void _eputs(char *str)
         }
         while (str[j] != '\0')
         {
-                _eputchar(str[j]);
+                shell_error_putchar(str[j]);
                 j++;
         }
 }
 
 /**
- * _putsfd - prints input strings
+ * shell_puts_fd - prints input strings
  * @str: the string to be pointed
  * @fd: the filedescriptor to write
  *
  * Return: number of charaters put
  */
-int _putsfd(char *str, int fd)
+int shell_puts_fd(char *str, int fd)
 {
         int j = 0;
 
@@ -39,28 +39,28 @@ int _putsfd(char *str, int fd)
         }
         while (*str)
         {
-                j += _putfd(*str++, fd);
+                j += shell_put_fd(*str++, fd);
         }
         return (j);
 }
 
 /**
- *_eputchar - write character c
+ *shell_errorputchar - write character c
  * @c: The character to print
  *
  * Return: 1 - success, otherwise 1 - error
  */
-int _eputchar(char c)
+int shell_error_putchar(char c)
 {
         static int j;
-        static char buf[WRITE_BUF_SIZE];
+        static char buf[WRITE_BUFFER_SIZE];
 
-        if (c == BUF_FLUSH || j >= WRITE_BUF_SIZE)
+        if (c == BUFFER_FLUSH || j >= WRITE_BUFFER_SIZE)
         {
                 write(2, buf, j);
                 j = 0;
         }
-        if (c != BUF_FLUSH)
+        if (c != BUFFER_FLUSH)
         {
                 buf[j++] = c;
         }

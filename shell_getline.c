@@ -1,26 +1,26 @@
 #include "shell.h"
 
 /**
- * input_buf - buffers
+ * shell_put_buf - buffers
  * @para: parameter struct
  * @buf: address of buffer
  * @len: address of len var
  * Return: bytes read
  */
-ssize_t input_buf(info_t *para, char **buf, size_t *len)
+ssize_t shell_input_buf(shell_info_t *para, char **buf, size_t *len)
 {
         ssize_t a = 0;
         size_t len_pa = 0;
 
-        if (!*len) /* if nothing lest in the buffer, fill it */
+        if (!*length) /* if nothing lest in the buffer, fill it */
         {
                 free(*buf);
                 *buf = NULL;
-                signal(SIGINT, sigintHandler);
+                signal(SIGINT, shell_siginal_interrupt_handler);
 #if USE_GETLINE
                 a = getline(buf, &len_pa, stdin);
 #else
-                a = _getline(para, buf, &len_pa);
+                a = shell_getline(para, buf, &len_pa);
 #endif
                 if (a > 0)
                 {
@@ -31,10 +31,10 @@ ssize_t input_buf(info_t *para, char **buf, size_t *len)
                         }
                         para->linecount_flag = 1;
                         remove_comments(*buf);
-                        build_history_list(para, *buf, para->histcount++);
+                        shell_build_history_list(para, *buf, para->history_count++);
                         {
-                                *len = a;
-                                para->cmd_buf = buf;
+                                *length = a;
+                                para->cmd_buffer = buf;
                         }
                 }
         }
@@ -42,12 +42,12 @@ ssize_t input_buf(info_t *para, char **buf, size_t *len)
 }
 
 /**
- * get_input - gets a (line) - (the newline)
+ * shell_get_input - gets a (line) - (the newline)
  * @info: parameter struct
  *
  * Return: bytes read
  */
-ssize_t get_input(info_t *info)
+ssize_t shell_get_input(shell_info_t *info)
 {
         static char *cha_buf;
         static size_t a;
@@ -56,7 +56,7 @@ ssize_t get_input(info_t *info)
         ssize_t c = 0;
         char **buff_pa = &(info->arg), *pa;
 
-        _putchar(BUF_FLUSH);
+        shell_putchar(BUFFER_FLUSH);
         c = input_buf(info, &cha_buf, &length);
         if (c == -1)
                 return (-1);
@@ -77,25 +77,25 @@ ssize_t get_input(info_t *info)
                 if (a >= length)
                 {
                         a = length = 0;
-                        info->cmd_buf_type = CMD_NORM;
+                        info->cmd_buffer_type = COMMAND_NORM;
                 }
 
                 *buff_pa = pa;
-                return (_strlen(pa));
+                return (shell_string_length(pa));
         }
         *buff_pa = cha_buf;
         return (c);
 }
 
 /**
- * read_buf - reads a buffer
+ * shell_read_buf - reads a buffer
  * @info: parameter struct
  * @buff: buffer
  * @s: size
  *
  * Return: a
  */
-ssize_t read_buf(info_t *info, char *buff, size_t *s)
+ssize_t shell_read_buf(shell_info_t *info, char *buff, size_t *s)
 {
         ssize_t a = 0;
 
@@ -104,7 +104,7 @@ ssize_t read_buf(info_t *info, char *buff, size_t *s)
                 return (0);
         }
 
-        a = read(info->readfd, buff, READ_BUF_SIZE);
+        a = read(info->read_fd, buff, READ_BUFFER_SIZE);
         if (a >= 0)
         {
                 *s = a;
@@ -113,16 +113,16 @@ ssize_t read_buf(info_t *info, char *buff, size_t *s)
 }
 
 /**
- * _getline - gets the next line
+ * shell_get_line - gets the next line
  * @info: parameter struct
  * @ptr: address of pointer
  * @len : size of preallocated
  *
  * Return: s
  */
-int _getline(info_t *info, char **ptr, size_t *len)
+int shell_get_line(shell_info_t *info, char **ptr, size_t *len)
 {
-        static char buf[READ_BUF_SIZE];
+        static char buf[READ_BUFFER_SIZE];
         static size_t a, length;
         size_t t;
         ssize_t r = 0, s = 0;
@@ -138,21 +138,21 @@ int _getline(info_t *info, char **ptr, size_t *len)
                 a = length = 0;
         }
 
-        r = read_buf(info, buf, &length);
+        r = shell_read_buf(info, buf, &length);
         if (r == -1 || (r == 0 && length == 0))
         {
                 return (-1);
         }
 
-        c = _strchr(buf + a, '\n');
+        c = shell_string_char(buf + a, '\n');
         t = c ? 1 + (unsigned int)(c - buf) : length;
-        new_pa = _realloc(pa, s, s ? s + t : t + 1);
+        new_pa = shell_reallocate(pa, s, s ? s + t : t + 1);
         if (!new_pa)
                 return (pa ? free(pa), -1 : -1);
         if (s)
-                _strncat(new_pa, buf + a, t - a);
+                shell_string_concat_n(new_pa, buf + a, t - a);
         else
-                _strncpy(new_pa, buf + a, t - a + 1);
+                shell_string_copy_n(new_pa, buf + a, t - a + 1);
 
         s += t - a;
         a = t;
@@ -165,14 +165,14 @@ int _getline(info_t *info, char **ptr, size_t *len)
 }
 
 /**
- * sigintHandler - blocks copy
+ * shell_siginal_interrupt_handler - blocks copy
  * @sign_num: the signal number
  *
  * Return: void
  */
-void sigintHandler(__attribute__((unused))int sign_num)
+void shell_siginal_interrupt_handler(__attribute__((unused))int sign_num)
 {
-        _puts("\n");
-        _puts("$ ");
-        _putchar(BUF_FLUSH);
+        shell_puts("\n");
+        shell_puts("$ ");
+        shell_putchar(BUFFER_FLUSH);
 }

@@ -1,5 +1,5 @@
-#ifndef _MY_SHELL_H_
-#define _MY_SHELL_H_
+#ifndef _SHELL_H_
+#define _SHELL_H_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -231,4 +231,4 @@ size_t shell_print_list(const shell_list_t *);
 shell_list_t *shell_node_starts_with(shell_list_t *, char *, char);
 ssize_t shell_get_node_index(shell_list_t *, shell_list_t *);
 
-#endif _MY_SHELL_H_
+#endif

@@ -18,8 +18,8 @@ int shell_exit(shell_info_t *info)
                 {
                         info->status = 2;
                         shell_print_error(info, "Illegal number: ");
-                        shell_errorshell_puts(info->argv[1]);
-                        shell_errorshell_putchar('\n');
+shell_error_puts(info->argv[1]);
+                        shell_error_putchar('\n');
                         return (1);
                 }
                 info->err_num = shell_error_ascii_to_integer(info->argv[1]);

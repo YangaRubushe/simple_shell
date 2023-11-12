@@ -14,15 +14,15 @@ int hsh(shell_info_t *info, char **av)
 
         while (r != -1 && builtin_ret != -2)
         {
-                clear_info(info);
+                shell_clear_info(info);
                 if (shell_interactive(info))
-                        _puts("$ ");
+                        shell_puts("$ ");
                 shell_error_putchar(BUFFER_FLUSH);
-                r = get_input(info);
+                r = shell_get_input(info);
                 if (r != -1)
                 {
 
-                        set_info(info, av);
+                        shell_set_info(info, av);
                         builtin_ret = shell_find_builtin(info);
 
                         if (builtin_ret == -1)
@@ -30,7 +30,7 @@ int hsh(shell_info_t *info, char **av)
                 }
                 else if (shell_interactive(info))
                         shell_putchar('\n');
-                free_info(info, 0);
+                shell_free_info(info, 0);
         }
         shell_write_history(info);
         free_info(info, 1);
@@ -54,7 +54,7 @@ int hsh(shell_info_t *info, char **av)
 int shell_find_builtin(shell_info_t *info)
 {
         int i, built_in_ret = -1;
-        builtin_table builtintbl[] = {
+       shell_ builtin_table builtintbl[] = {
                 {"exit", shell_exit},
                 {"env", shell_environment},
                 {"help", shell_help},

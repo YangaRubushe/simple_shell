@@ -8,7 +8,7 @@
  */
 int shell_environment(shell_info_t *info)
 {
-        print_list_str(info->env);
+        shell_print_list_string(info->env);
         return (0);
 }
 
@@ -26,7 +26,7 @@ char *shell_get_environment(shell_info_t *info, const char *name)
 
         while (node)
         {
-                a = shell_node_starts_with(node->str, name);
+                a = shell_starts_with(node->str, name);
                 if (a && *a)
                 {
                         return (a);
