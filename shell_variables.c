@@ -126,7 +126,7 @@ int shell_replace_variables(shell_info_t *info)
                                         shell_string_duplicate(shell_convert_number(getpid(), 10, 0)));
                         continue;
                 }
-                node = shell_starts_with(info->env, &info->argv[i][1], '=');
+                node = shell_node_starts_with(info->env, &info->argv[i][1], '=');
                 if (node)
                 {
                         shell_replace_string(&(info->argv[i]),

@@ -70,11 +70,11 @@ char *shell_find_path(shell_info_t *info, char *pathstr, char *cmd)
                         path = shell_duplicate_chars(pathstr, curr_pos, i);
                         if (!*path)
 
-                        shell_string_concat_n(path, cmd);
+                        shell_string_concat(path, cmd);
                         else
                         {
-                                shell_string_concat_n(path, "/");
-                                shell_string_concat_n(path, cmd);
+                                shell_string_concat(path, "/");
+                                shell_string_concat(path, cmd);
                         }
                         if (shell_is_command(info, path))
                                 return (path);

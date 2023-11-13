@@ -57,7 +57,7 @@ ssize_t shell_get_input(shell_info_t *info)
         char **buff_pa = &(info->arg), *pa;
 
         shell_putchar(BUFFER_FLUSH);
-        c = shell_get_input(info, &cha_buf, &length);
+        c = shell_input_buf(info, &cha_buf, &length);
         if (c == -1)
                 return (-1);
         if (length)

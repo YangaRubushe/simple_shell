@@ -33,7 +33,7 @@ int hsh(shell_info_t *info, char **av)
                 shell_free_info(info, 0);
         }
         shell_write_history(info);
-        free_info(info, 1);
+        shell_free_info(info, 1);
         if (!shell_interactive(info) && info->status)
                 exit(info->status);
         if (builtin_ret == -2)
@@ -54,7 +54,7 @@ int hsh(shell_info_t *info, char **av)
 int shell_find_builtin(shell_info_t *info)
 {
         int i, built_in_ret = -1;
-       shell_ builtin_table builtintbl[] = {
+       shell_builtin_table builtintbl[] = {
                 {"exit", shell_exit},
                 {"env", shell_environment},
                 {"help", shell_help},
@@ -108,12 +108,12 @@ void shell_find_command(shell_info_t *info)
         else
         {
                 if ((shell_interactive(info) || shell_get_environment(info, "PATH=")
-                                        || info->argv[0][0] == '/') && is_cmd(info, info->argv[0]))
+                                        || info->argv[0][0] == '/') && shell_is_command(info, info->argv[0]))
                         shell_fork_command(info);
                 else if (*(info->arg) != '\n')
                 {
                         info->status = 127;
-                        print_error(info, "not found\n");
+			shell_print_error(info, "not found\n");
                 }
         }
 }
@@ -136,9 +136,9 @@ void shell_fork_command(shell_info_t *info)
         }
         if (child_pid == 0)
         {
-                if (execve(info->path, info->argv, get_environ(info)) == -1)
+                if (execve(info->path, info->argv, shell_get_shell_environment(info)) == -1)
                 {
-                        free_info(info, 1);
+                        shell_free_info(info, 1);
                         if (errno == EACCES)
                                 exit(126);
                         exit(1);
@@ -151,7 +151,7 @@ void shell_fork_command(shell_info_t *info)
                 {
                         info->status = WEXITSTATUS(info->status);
                         if (info->status == 126)
-                                print_error(info, "Permission denied\n");
+                                shell_print_error(info, "Permission denied\n");
                 }
         }
 }

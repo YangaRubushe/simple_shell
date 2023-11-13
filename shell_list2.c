@@ -26,7 +26,7 @@ size_t shell_list_length(const shell_list_t *h)
  */
 char **shell_list_to_strings(shell_list_t *head)
 {
-        list_t *node = head;
+        shell_list_t *node = head;
         size_t i = shell_list_length(head), j;
         char **strs;
         char *str;
@@ -47,7 +47,7 @@ char **shell_list_to_strings(shell_list_t *head)
                         return (NULL);
                 }
 
-                str = shell_string_copy_n(str, node->str);
+                str = shell_string_copy(str, node->str);
                 strs[i] = str;
         }
         strs[i] = NULL;
@@ -79,20 +79,20 @@ size_t shell_print_list(const shell_list_t *h)
 }
 
 /**
- * node_starts_with - returns node whose string starts with prefix
+ * shell_node_starts_with - returns node whose string starts with prefix
  * @node: pointer to list head
  * @prefix: string to match
  * @c: the next character
  *
  * Return: match node or null
  */
-list_t *node_starts_with(shell_list_t *node, char *prefix, char c)
+shell_list_t *shell_node_starts_with(shell_list_t *node, char *prefix, char c)
 {
         char *p = NULL;
 
         while (node)
         {
-                p = shell_node_starts_with(node->str, prefix);
+                p = shell_starts_with(node->str, prefix);
                 if (p && ((c == -1) || (*p == c)))
                         return (node);
                 node = node->next;
