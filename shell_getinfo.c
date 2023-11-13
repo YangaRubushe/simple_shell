@@ -24,7 +24,7 @@ void shell_set_info(shell_info_t *info, char **av)
         info->fname = av[0];
         if (info->arg)
         {
-                info->argv = strtok(info->arg, " \t");
+                info->argv = shell_string_tokenize(info->arg, " \t");
                 if (!info->argv)
                 {
 
