@@ -1,39 +1,39 @@
 #include "shell.h"
 
 /**
- * get_history_file - gets the history file
+ * shell_get_history_file - gets the history file
  * @info: parameter struct
  *
  * Return: allocated string containing history file
  */
-char *get_history_file(info_t *info)
+char *shell_get_history_file(shell_info_t *info)
 {
         char *buf, *dir;
 
-        dir = _getenv(info, "HOME=");
+        dir = shell_get_environment(info, "HOME=");
         if (!dir)
                 return (NULL);
-        buf =  malloc(sizeof(char) * (_strlen(dir) + _strlen(HIST_FILE) + 2));
+        buf =  malloc(sizeof(char) * (shell_string_length(dir) + shell_string_length(SHELL_HISTORY_FILE) + 2));
         if (!buf)
                 return (NULL);
         buf[0] = 0;
-        _strcpy(buf, dir);
-        _strcat(buf, "/");
-        _strcat(buf, HIST_FILE);
+        shell_string_copy(buf, dir);
+        shell_string_concat(buf, "/");
+        shell_string_concat(buf, SHELL_HISTORY_FILE);
         return (buf);
 }
 
 /**
- * write_history - creates a file to an existing file
+ * shell_write_history - creates a file to an existing file
  * @info: the parameter struct
  *
  * Return: 1 success, else -1
  */
-int write_history(info_t *info)
+int shell_write_history(shell_info_t *info)
 {
         ssize_t fd;
-        char *filename = get_history_file(info);
-        list_t *node = NULL;
+        char *filename = shell_get_history_file(info);
+        shell_list_t *node = NULL;
 
         if (!filename)
                 return (-1);
@@ -44,26 +44,26 @@ int write_history(info_t *info)
                 return (-1);
         for (node = info->history; node; node = node->next)
         {
-                _putsfd(node->str, fd);
-                _putfd('\n', fd);
+                shell_puts_fd(node->str, fd);
+                shell_put_fd('\n', fd);
         }
-        _putfd(BUF_FLUSH, fd);
+        shell_put_fd(BUFFER_FLUSH, fd);
         close(fd);
         return (1);
 }
 
 /**
- * read_history - reads history from file
+ * shell_read_history - reads history from file
  * @info: the parameter struct
  *
  * Return: histcount on success, 0 otherwise
  */
-int read_history(info_t *info)
+int shell_read_history(shell_info_t *info)
 {
         int i, last = 0, linecount = 0;
         ssize_t fd, rdlen, fsize = 0;
         struct stat st;
-        char *buf = NULL, *filename = get_history_file(info);
+        char *buf = NULL, *filename = shell_get_history_file(info);
 
         if (!filename)
                 return (0);
@@ -88,34 +88,34 @@ int read_history(info_t *info)
                 if (buf[i] == '\n')
                 {
                         buf[i] = 0;
-                        build_history_list(info, buf + last, linecount++);
+                        shell_build_history_list(info, buf + last, linecount++);
                         last = i + 1;
                 }
         if (last != i)
-                build_history_list(info, buf + last, linecount++);
+                shell_build_history_list(info, buf + last, linecount++);
         free(buf);
-        info->histcount = linecount;
-        while (info->histcount-- >= HIST_MAX)
-                delete_node_at_index(&(info->history), 0);
-        renumber_history(info);
-        return (info->histcount);
+        info->history_count = linecount;
+        while (info->history_count-- >= SHELL_HISTORY_MAX)
+                shell_delete_node_at_index(&(info->history), 0);
+        shell_renumber_history(info);
+        return (info->history_count);
 }
 
 /**
- * build_history_list - adds entry to a history linked list
+ * shell_build_history_list - adds entry to a history linked list
  * @info: Structure containing potentail arguments. Used to maintain
  * @buf: buffer
  * @linecount: the history linecount, histcount
  *
  * Return: Always 0
  */
-int build_history_list(info_t *info, char *buf, int linecount)
+int shell_build_history_list(shell_info_t *info, char *buf, int linecount)
 {
-        list_t *node = NULL;
+        shell_list_t *node = NULL;
 
         if (info->history)
                 node = info->history;
-        add_node_end(&node, buf, linecount);
+        shell_add_node_end(&node, buf, linecount);
 
         if (!info->history)
                 info->history = node;
@@ -123,14 +123,14 @@ int build_history_list(info_t *info, char *buf, int linecount)
 }
 
 /**
- * renumber_history - remember the history linked list after changes
+ * shell_renumber_history - remember the history linked list after changes
  * @info: Structure containing potentail arguments. Used to maintain
  *
  * Return: the new histcount
  */
-int renumber_history(info_t *info)
+int shell_renumber_history(shell_info_t *info)
 {
-        list_t *node = info->history;
+        shell_list_t *node = info->history;
         int i = 0;
 
         while (node)
@@ -138,5 +138,5 @@ int renumber_history(info_t *info)
                 node->num = i++;
                 node = node->next;
         }
-        return (info->histcount = i);
+        return (info->history_count = i);
 }

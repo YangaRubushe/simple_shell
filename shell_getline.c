@@ -1,13 +1,13 @@
 #include "shell.h"
 
 /**
- * shell_put_buf - buffers
+ * shell_input_buf - buffers
  * @para: parameter struct
  * @buf: address of buffer
  * @len: address of len var
  * Return: bytes read
  */
-ssize_t shell_input_buf(shell_info_t *para, char **buf, size_t *len)
+ssize_t shell_input_buf(shell_info_t *para, char **buf, size_t *length)
 {
         ssize_t a = 0;
         size_t len_pa = 0;
@@ -16,11 +16,11 @@ ssize_t shell_input_buf(shell_info_t *para, char **buf, size_t *len)
         {
                 free(*buf);
                 *buf = NULL;
-                signal(SIGINT, shell_siginal_interrupt_handler);
+                signal(SIGINT, shell_signal_interrupt_handler);
 #if USE_GETLINE
-                a = getline(buf, &len_pa, stdin);
+                a = shell_get_line(buf, &len_pa, stdin);
 #else
-                a = shell_getline(para, buf, &len_pa);
+                a = shell_get_line(para, buf, &len_pa);
 #endif
                 if (a > 0)
                 {
@@ -30,7 +30,7 @@ ssize_t shell_input_buf(shell_info_t *para, char **buf, size_t *len)
                                 a--;
                         }
                         para->linecount_flag = 1;
-                        remove_comments(*buf);
+                        shell_remove_comments(*buf);
                         shell_build_history_list(para, *buf, para->history_count++);
                         {
                                 *length = a;
@@ -57,7 +57,7 @@ ssize_t shell_get_input(shell_info_t *info)
         char **buff_pa = &(info->arg), *pa;
 
         shell_putchar(BUFFER_FLUSH);
-        c = input_buf(info, &cha_buf, &length);
+        c = shell_get_input(info, &cha_buf, &length);
         if (c == -1)
                 return (-1);
         if (length)
@@ -65,10 +65,10 @@ ssize_t shell_get_input(shell_info_t *info)
                 b = a;
                 pa = cha_buf + a;
 
-                check_chain(info, cha_buf, &b, a, length);
+                shell_check_command_chain(info, cha_buf, &b, a, length);
                 while (b < length)
                 {
-                        if (is_chain(info, cha_buf, &b))
+                        if (shell_is_command_chain(info, cha_buf, &b))
                                 break;
                         b++;
                 }
@@ -77,7 +77,7 @@ ssize_t shell_get_input(shell_info_t *info)
                 if (a >= length)
                 {
                         a = length = 0;
-                        info->cmd_buffer_type = COMMAND_NORM;
+                        info->cmd_buffer_type = COMMAND_NORMAL;
                 }
 
                 *buff_pa = pa;
@@ -144,7 +144,7 @@ int shell_get_line(shell_info_t *info, char **ptr, size_t *len)
                 return (-1);
         }
 
-        c = shell_string_char(buf + a, '\n');
+        c = shell_string_find_char(buf + a, '\n');
         t = c ? 1 + (unsigned int)(c - buf) : length;
         new_pa = shell_reallocate(pa, s, s ? s + t : t + 1);
         if (!new_pa)

@@ -1,20 +1,20 @@
 #include "shell.h"
 
 /**
- * shell_get_environment - return the string array copy of our environ
+ * shell_get_shell_environment - return the string array copy of our environ
  * @info: Structure containing potentail argument. Used to maintain
  *        constant function prototype.
  * Return: Always 0
  */
-char **shell_get_environment(shell_info_t *info)
+char **shell_get_shell_environment(shell_info_t *info)
 {
-        if (!info->environ || info->env_changed)
+        if (!info->shell_environ || info->env_changed)
         {
-                info->environ = list_to_strings(info->env);
+                info->shell_environ = shell_list_to_strings(info->env);
                 info->env_changed = 0;
         }
 
-        return (info->environ);
+        return (info->shell_environ);
 }
 
 /**
@@ -24,9 +24,9 @@ char **shell_get_environment(shell_info_t *info)
  * Return: 1 delete, 0 otherwise
  * @var: the string env var property
  */
-int shell_unset_environment_vatiable(shell_info_t *info, char *var)
+int shell_unset_environment_variable(shell_info_t *info, char *var)
 {
-        list_t *node = info->env;
+        shell_list_t *node = info->env;
         size_t i = 0;
         char *p;
 
@@ -61,7 +61,7 @@ int shell_unset_environment_vatiable(shell_info_t *info, char *var)
 int shell_set_environment_variable(shell_info_t *info, char *var, char *value)
 {
         char *buf = NULL;
-        list_t *node;
+        shell_list_t *node;
         char *p;
 
         if (!var || !value)
