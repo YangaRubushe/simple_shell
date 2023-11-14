@@ -75,12 +75,12 @@ shell_list_t *shell_add_node_end(shell_list_t **head, const char *str, int num)
 }
 
 /**
- * print_list_str - prints only str element
+ * shell_print_list_string - prints only str element
  * @h: pointer to first node
  *
  * Return: size of list
  */
-size_t print_list_str(const shell_list_t *h)
+size_t shell_print_list_string(const shell_list_t *h)
 {
         size_t i = 0;
 
@@ -101,7 +101,7 @@ size_t print_list_str(const shell_list_t *h)
  *
  * Return: 1 success, 0 failure
  */
-int delete_node_at_index(shell_list_t **head, unsigned int index)
+int shell_delete_node_at_index(shell_list_t **head, unsigned int index)
 {
         shell_list_t *node, *prev_node;
         unsigned int i = 0;

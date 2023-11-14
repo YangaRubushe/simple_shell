@@ -18,7 +18,7 @@ int shell_exit(shell_info_t *info)
                 {
                         info->status = 2;
                         shell_print_error(info, "Illegal number: ");
-shell_error_puts(info->argv[1]);
+			shell_error_puts(info->argv[1]);
                         shell_error_putchar('\n');
                         return (1);
                 }

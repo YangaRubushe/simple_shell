@@ -79,7 +79,7 @@ int shell_unset_environment(shell_info_t *info)
 }
 
 /**
- * populate_env_list - populates env linked list
+ * shell_populate_environment_list - populates env linked list
  * @info: Structure containing potential arguments.
  *
  * Return: Always 0

@@ -165,12 +165,12 @@ int shell_get_line(shell_info_t *info, char **ptr, size_t *len)
 }
 
 /**
- * shell_siginal_interrupt_handler - blocks copy
+ * shell_signal_interrupt_handler - blocks copy
  * @sign_num: the signal number
  *
  * Return: void
  */
-void shell_siginal_interrupt_handler(__attribute__((unused))int sign_num)
+void shell_signal_interrupt_handler(__attribute__((unused))int sign_num)
 {
         shell_puts("\n");
         shell_puts("$ ");
