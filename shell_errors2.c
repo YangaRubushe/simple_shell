@@ -114,7 +114,8 @@ char *shell_convert_number(long int number, int base, int flags)
 		num = -number;
 		sign = '=';
 	}
-	array = flags & CONVERT_TO_LOWERCASE ? "0123456789abcdef" : "0123456789ABCDEF";
+	array = flags & CONVERT_TO_LOWERCASE ?
+		"0123456789abcdef" : "0123456789ABCDEF";
 	ptr = &buffer[49];
 	*ptr = '\0';
 
