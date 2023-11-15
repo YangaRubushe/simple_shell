@@ -45,9 +45,9 @@ extern char **environ;
  */
 typedef struct shell_liststr
 {
-    int num;
-    char *str;
-    struct shell_liststr *next;
+	int num;
+	char *str;
+	struct shell_liststr *next;
 } shell_list_t;
 
 /**
@@ -73,29 +73,29 @@ typedef struct shell_liststr
  */
 typedef struct shell_passinfo
 {
-    char *arg;
-    char **argv;
-    char *path;
-    int argc;
-    unsigned int line_count;
-    int err_num;
-    int linecount_flag;
-    char *fname;
-    shell_list_t *env;
-    shell_list_t *history;
-    shell_list_t *alias;
-    char **environ;
-    int env_changed;
-    int status;
-    char **cmd_buffer;
-    int cmd_buffer_type;
-    int read_fd;
-    int history_count;
+	char *arg;
+	char **argv;
+	char *path;
+	int argc;
+	unsigned int line_count;
+	int err_num;
+	int linecount_flag;
+	char *fname;
+	shell_list_t *env;
+	shell_list_t *history;
+	shell_list_t *alias;
+	char **environ;
+	int env_changed;
+	int status;
+	char **cmd_buffer;
+	int cmd_buffer_type;
+	int read_fd;
+	int history_count;
 } shell_info_t;
 
 #define SHELL_INFO_INIT \
 {NULL, NULL, NULL, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, \
-        0, 0, 0}
+	0, 0, 0}
 
 /**
  * struct shell_builtin - encapsulates a string and its corresponding function.
@@ -104,8 +104,8 @@ typedef struct shell_passinfo
  */
 typedef struct shell_builtin
 {
-    char *type;
-    int (*func)(shell_info_t *);
+	char *type;
+	int (*func)(shell_info_t *);
 } shell_builtin_table;
 
 /* shell_shloop.c */
@@ -212,7 +212,8 @@ int shell_renumber_history(shell_info_t *);
 
 /* shell_variables.c */
 int shell_is_command_chain(shell_info_t *, char *, size_t *);
-void shell_check_command_chain(shell_info_t *, char *, size_t *, size_t, size_t);
+void shell_check_command_chain(shell_info_t *,
+		char *, size_t *, size_t, size_t);
 int shell_replace_aliases(shell_info_t *);
 int shell_replace_variables(shell_info_t *);
 int shell_replace_string(char **, char *);

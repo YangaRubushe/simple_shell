@@ -9,17 +9,17 @@
  */
 int shell_is_command(shell_info_t *info, char *path)
 {
-        struct stat st;
+	struct stat st;
 
-        (void)info;
-        if (!path || stat(path, &st))
-                return (0);
+	(void)info;
+	if (!path || stat(path, &st))
+		return (0);
 
-        if (st.st_mode & S_IFREG)
-        {
-                return (1);
-        }
-        return (0);
+	if (st.st_mode & S_IFREG)
+	{
+		return (1);
+	}
+	return (0);
 }
 
 /**
@@ -32,14 +32,14 @@ int shell_is_command(shell_info_t *info, char *path)
  */
 char *shell_duplicate_chars(char *pathstr, int start, int stop)
 {
-        static char buf[1024];
-        int i = 0, k = 0;
+	static char buf[1024];
+	int i = 0, k = 0;
 
-        for (k = 0, i = start; i < stop; i++)
-                if (pathstr[i] != ':')
-                        buf[k++] = pathstr[i];
-        buf[k] = 0;
-        return (buf);
+	for (k = 0, i = start; i < stop; i++)
+		if (pathstr[i] != ':')
+			buf[k++] = pathstr[i];
+	buf[k] = 0;
+	return (buf);
 }
 
 /**
@@ -52,37 +52,36 @@ char *shell_duplicate_chars(char *pathstr, int start, int stop)
  */
 char *shell_find_path(shell_info_t *info, char *pathstr, char *cmd)
 {
-        int i = 0, curr_pos = 0;
-        char *path;
+	int i = 0, curr_pos = 0;
+	char *path;
 
-        if (!pathstr)
-                return (NULL);
-        if ((shell_string_length(cmd) > 2) && shell_starts_with(cmd, "./"))
-        {
-                if (shell_is_command(info, cmd))
-                        return (cmd);
-        }
-        while (1)
-        {
-                if (!pathstr[i] || pathstr[i] == ':')
-                {
+	if (!pathstr)
+		return (NULL);
+	if ((shell_string_length(cmd) > 2) && shell_starts_with(cmd, "./"))
+	{
+		if (shell_is_command(info, cmd))
+			return (cmd);
+	}
+	while (1)
+	{
+		if (!pathstr[i] || pathstr[i] == ':')
+		{
 
-                        path = shell_duplicate_chars(pathstr, curr_pos, i);
-                        if (!*path)
-
-                        shell_string_concat(path, cmd);
-                        else
-                        {
-                                shell_string_concat(path, "/");
-                                shell_string_concat(path, cmd);
-                        }
-                        if (shell_is_command(info, path))
-                                return (path);
-                        if (!pathstr[i])
-                                break;
-                        curr_pos = i;
-                }
-                i++;
-        }
-        return (NULL);
+			path = shell_duplicate_chars(pathstr, curr_pos, i);
+			if (!*path)
+				shell_string_concat(path, cmd);
+			else
+			{
+				shell_string_concat(path, "/");
+				shell_string_concat(path, cmd);
+			}
+			if (shell_is_command(info, path))
+				return (path);
+			if (!pathstr[i])
+				break;
+			curr_pos = i;
+		}
+		i++;
+	}
+	return (NULL);
 }

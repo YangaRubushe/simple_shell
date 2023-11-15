@@ -9,25 +9,25 @@
  */
 char *shell_string_copy_n(char *des, char *src, int amount)
 {
-        int a, b;
-        char *z = des;
+	int a, b;
+	char *z = des;
 
-        a = 0;
-        while (src[a] != '\0' && a < amount - 1)
-        {
-                des[a] = src[a];
-                a++;
-        }
-        if (a < amount)
-        {
-                b = a;
-                while (b < amount)
-                {
-                        des[b] = '\0';
-                        b++;
-                }
-        }
-        return (z);
+	a = 0;
+	while (src[a] != '\0' && a < amount - 1)
+	{
+		des[a] = src[a];
+		a++;
+	}
+	if (a < amount)
+	{
+		b = a;
+		while (b < amount)
+		{
+			des[b] = '\0';
+			b++;
+		}
+	}
+	return (z);
 }
 
 /**
@@ -39,26 +39,26 @@ char *shell_string_copy_n(char *des, char *src, int amount)
  */
 char *shell_string_concat_n(char *firstr, char *src, int amount)
 {
-        int a, b;
-        char *z = firstr;
+	int a, b;
+	char *z = firstr;
 
-        a = 0;
-        b = 0;
-        while (firstr[a] != '\0')
-        {
-                a++;
-        }
-        while (src[b] != '\0' && b < amount)
-        {
-                firstr[a] = src[b];
-                a++;
-                b++;
-        }
-        if (b < amount)
-        {
-                firstr[a] = '\0';
-        }
-        return (z);
+	a = 0;
+	b = 0;
+	while (firstr[a] != '\0')
+	{
+		a++;
+	}
+	while (src[b] != '\0' && b < amount)
+	{
+		firstr[a] = src[b];
+		a++;
+		b++;
+	}
+	if (b < amount)
+	{
+		firstr[a] = '\0';
+	}
+	return (z);
 }
 
 /**
@@ -69,12 +69,12 @@ char *shell_string_concat_n(char *firstr, char *src, int amount)
  */
 char *shell_string_find_char(char *str, char cha)
 {
-        do {
-                if (*str == cha)
-                {
-                        return (str);
-                }
-        } while (*str++ != '\0');
+	do {
+		if (*str == cha)
+		{
+			return (str);
+		}
+	} while (*str++ != '\0');
 
-        return (NULL);
+	return (NULL);
 }

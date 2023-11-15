@@ -8,18 +8,17 @@
  */
 void shell_error_puts(char *str)
 {
-        int j = 0;
+	int j = 0;
 
-
-        if (!str)
-        {
-                return;
-        }
-        while (str[j] != '\0')
-        {
-                shell_error_putchar(str[j]);
-                j++;
-        }
+	if (!str)
+	{
+		return;
+	}
+	while (str[j] != '\0')
+	{
+		shell_error_putchar(str[j]);
+		j++;
+	}
 }
 
 /**
@@ -31,40 +30,40 @@ void shell_error_puts(char *str)
  */
 int shell_puts_fd(char *str, int fd)
 {
-        int j = 0;
+	int j = 0;
 
-        if (!str)
-        {
-                return (0);
-        }
-        while (*str)
-        {
-                j += shell_put_fd(*str++, fd);
-        }
-        return (j);
+	if (!str)
+	{
+		return (0);
+	}
+	while (*str)
+	{
+		j += shell_put_fd(*str++, fd);
+	}
+	return (j);
 }
 
 /**
- *shell_errorputchar - write character c
+ *shell_error_putchar - write character c
  * @c: The character to print
  *
  * Return: 1 - success, otherwise 1 - error
  */
 int shell_error_putchar(char c)
 {
-        static int j;
-        static char buf[WRITE_BUFFER_SIZE];
+	static int j;
+	static char buf[WRITE_BUFFER_SIZE];
 
-        if (c == BUFFER_FLUSH || j >= WRITE_BUFFER_SIZE)
-        {
-                write(2, buf, j);
-                j = 0;
-        }
-        if (c != BUFFER_FLUSH)
-        {
-                buf[j++] = c;
-        }
-        return (0);
+	if (c == BUFFER_FLUSH || j >= WRITE_BUFFER_SIZE)
+	{
+		write(2, buf, j);
+		j = 0;
+	}
+	if (c != BUFFER_FLUSH)
+	{
+		buf[j++] = c;
+	}
+	return (0);
 }
 
 /**
@@ -76,17 +75,17 @@ int shell_error_putchar(char c)
  */
 int shell_put_fd(char c, int fd)
 {
-        static int j;
-        static char buf[WRITE_BUFFER_SIZE];
+	static int j;
+	static char buf[WRITE_BUFFER_SIZE];
 
-        if (c == BUFFER_FLUSH || j >= WRITE_BUFFER_SIZE)
-        {
-                write(fd, buf, j);
-                j = 0;
-        }
-        if (c != BUFFER_FLUSH)
-        {
-                buf[j++] = c;
-        }
-        return (1);
+	if (c == BUFFER_FLUSH || j >= WRITE_BUFFER_SIZE)
+	{
+		write(fd, buf, j);
+		j = 0;
+	}
+	if (c != BUFFER_FLUSH)
+	{
+		buf[j++] = c;
+	}
+	return (1);
 }
