@@ -67,16 +67,16 @@ int shell_change_directory(shell_info_t *info)
 	else
 		chdir_ret = chdir(info->argv[1]);
 	if (chdir_ret == -1)
-
+	{
 		shell_print_error(info, "can't cd to ");
 		shell_error_puts(info->argv[1]), shell_error_putchar('\n');
-
+	}
 	else
+	{
 		shell_set_environment_variable(info,
 				"OLDPWD", shell_get_environment(info, "PWD="));
-		shell_set_environment_variable(info,
-				"PWD", getcwd(buffer, 1024));
-	return (0);
+		shell_set_environment_variable(info, "PWD", getcwd(buffer, 1024));
+	} return (0);
 }
 
 /**
