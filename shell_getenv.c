@@ -8,13 +8,13 @@
  */
 char **shell_get_shell_environment(shell_info_t *info)
 {
-        if (!info->shell_environ || info->env_changed)
+        if (!info->environ || info->env_changed)
         {
-                info->shell_environ = shell_list_to_strings(info->env);
+                info->environ = shell_list_to_strings(info->env);
                 info->env_changed = 0;
         }
 
-        return (info->shell_environ);
+        return (info->environ);
 }
 
 /**

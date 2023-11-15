@@ -89,9 +89,9 @@ int shell_populate_environment_list(shell_info_t *info)
         shell_list_t *node = NULL;
         size_t j;
 
-        for (j = 0; shell_environ[j]; j++)
+        for (j = 0; environ[j]; j++)
         {
-                shell_add_node_end(&node, shell_environ[j], 0);
+                shell_add_node_end(&node, environ[j], 0);
         }
         info->env = node;
         return (0);

@@ -64,8 +64,8 @@ void shell_free_info(shell_info_t *info, int all)
                         shell_free_list(&(info->history));
                 if (info->alias)
                         shell_free_list(&(info->alias));
-                shell_free(info->shell_environ);
-                info->shell_environ = NULL;
+                shell_free(info->environ);
+                info->environ = NULL;
                 shell_buffer_free((void **)info->cmd_buffer);
                 if (info->read_fd > 2)
                         close(info->read_fd);

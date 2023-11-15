@@ -35,7 +35,7 @@
 #define SHELL_HISTORY_FILE ".my_shell_shell_history"
 #define SHELL_HISTORY_MAX 4096
 
-extern char **shell_environ;
+extern char **environ;
 
 /**
  * struct shell_liststr - singly linked list
@@ -63,7 +63,7 @@ typedef struct shell_liststr
  * @env: linked list of environment variables
  * @history: history node
  * @alias: alias node
- * @shell_environ: modified copy of environment
+ * @environ: modified copy of environment
  * @env_changed: on if environment was changed
  * @status: the return status of the last executed command
  * @cmd_buffer: address of pointer
@@ -84,7 +84,7 @@ typedef struct shell_passinfo
     shell_list_t *env;
     shell_list_t *history;
     shell_list_t *alias;
-    char **shell_environ;
+    char **environ;
     int env_changed;
     int status;
     char **cmd_buffer;
